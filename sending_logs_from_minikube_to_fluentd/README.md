@@ -53,3 +53,17 @@ $ kubectl logs -f  log-simulator-66f7f979b4-ggvxg -n log-generator
 The log generator pod will be running for a few minutes before it stops by itself.
 
 
+#### 3. Deploying Fluentd Configuration ConfigMap
+When you visit [the GitHub repository for Fluentd’s DaemonSets](https://github.com/fluent/fluentd-kubernetes-daemonset), you see a range of YAML files. The Fluentd community has provided a range of standardized configurations for capturing Kubernetes logging and sending the contents on to a single destination. The configurations range from forwarding the content to another Fluentd node, to sending to various cloud-native services provided by AWS, Azure, and Google, to dedicated services such as Graylog, Loggly, and the more common targets Elasticsearch and Syslog.
+
+ The YAML configurations will need to give specific environment variable values and mount the right parts of the file system containing the logs we want to capture. If we wanted the DaemonSet to also apply some customized configuration, we would need to map additional configuration files into the system. Therefore, Rather than set a lot of environment values to control the current Fluentd configuration, we can look at how we can point Fluentd to an alternative configuration file and inject the modified configuration.This means if we wish to alter the configuration, we only need to redeploy a configuration change rather than changing the Docker image and the subsequent steps involved in redeploying it. We’ll do this using a Kubernetes ConfigMap. 
+
+ The ConfigMap can be included in our core Kubernetes YAML file, or we can use the Fluentd file, translate it to a suitable format, and deploy the configuration separately. This latter approach is more desirable, as we can check the configuration using the Fluentd dry-run feature to validate the configuration before deploying. If the configuration is embedded in the larger configuration file, the validation step won’t be possible. The name of the ConfigMap will then be referenced in the manifest YAML file.
+
+ The ```custom.conf``` file in this directory contains the configurations on which the Fluentd configuration configmap is created:
+
+ ```%sh
+ $ kubectl create configmap fluentd-conf --from-file=custom.conf --namespace=kube-system
+ ```
+
+ The Fluentd ConfigMap is associated with the kube-system namespace to match the fact that the standard Fluentd DaemonSet is deployed into that namespace. The use of this namespace makes sense; in this case we’re configuring and deploying a Kubernetes-wide service.
