@@ -83,3 +83,5 @@ When you visit [the GitHub repository for Fluentd’s DaemonSets](https://github
  ```%sh
  $kubectl apply -f fluentd-daemonset.yaml --namespace=kube-system
  ```
+
+ The local fluentd node should now be able to receive logs from minikube. 
