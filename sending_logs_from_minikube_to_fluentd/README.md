@@ -63,7 +63,23 @@ When you visit [the GitHub repository for Fluentd’s DaemonSets](https://github
  The ```custom.conf``` file in this directory contains the configurations on which the Fluentd configuration configmap is created:
 
  ```%sh
+ # creating the configmap
  $ kubectl create configmap fluentd-conf --from-file=custom.conf --namespace=kube-system
+
+ # checking out the created configmap
+ $ kubectl describe  configmap fluentd-conf -n kube-system
  ```
 
  The Fluentd ConfigMap is associated with the kube-system namespace to match the fact that the standard Fluentd DaemonSet is deployed into that namespace. The use of this namespace makes sense; in this case we’re configuring and deploying a Kubernetes-wide service.
+
+ #### 4. Deploying Fluentd DaemonSet 
+ Before deploying the DaemonSet, we should start our local Fluentd instance ready to receive log events:
+
+ ```%sh
+ $ fluentd -c forwardstdout.conf
+ ```
+
+ Then, we can deploy our Daemonset to Kubernetes:
+ ```%sh
+ $kubectl apply -f fluentd-daemonset.yaml --namespace=kube-system
+ ```
