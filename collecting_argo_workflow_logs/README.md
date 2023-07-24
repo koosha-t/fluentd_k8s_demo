@@ -66,6 +66,58 @@ $ argo get -n argo hello
 $ argo logs -n argo hello
 ```
 
+### 3. Templates [to be changed]
+There are several types of templates, divided into two different categories: *work* and *orchestration*. The first category defines work to be done. This includes:
+* Container
+* Container Set
+* Data
+* Resource
+* Script
+
+The second category orchestrates the work:
+* DAG
+* Steps
+* Suspend
+
+We've already submitted a workflow containing single container template in part 2 (```hello-workflow.yaml```)
+
+A __*container set*__ allows you to run multiple containers in a single pod. This is useful when you want the containers to share a common workspace, or when you want to consolidate pod spin-up time into one step in your workflow.
+
+A *__data template__* allows you to get data from storage (e.g. S3). This is useful when each item of data represents an item of work that needs doing.
+
+A __*resource template*__ allows you to create a Kubernetes resource and wait for it to meet a condition (e.g. successful). This is useful if you want to interoperate with another Kubernetes system, like AWS Spark EMR
+
+A *__script template__* allows you to run a script in a container. This is very similar to a container template, but when you've added a script to it.
+
+A *__DAG template__* is a common type of orchestration template. Look at ```dag-workflow.yaml``` as an example. 
+
+```%sh
+$ argo -n argo submit --watch dag-workflow.yaml
+```
+
+You should see something like:
+```
+Name:                dag-nms8c
+Namespace:           argo
+ServiceAccount:      unset (will run with the default ServiceAccount)
+Status:              Succeeded
+Conditions:          
+ PodRunning          False
+ Completed           True
+Created:             Mon Jul 24 15:14:36 -0400 (20 seconds ago)
+Started:             Mon Jul 24 15:14:36 -0400 (20 seconds ago)
+Finished:            Mon Jul 24 15:14:56 -0400 (now)
+Duration:            20 seconds
+Progress:            2/2
+ResourcesDuration:   6s*(1 cpu),6s*(100Mi memory)
+
+STEP          TEMPLATE  PODNAME                        DURATION  MESSAGE
+ ✔ dag-nms8c  main                                                 
+ ├─✔ a        whalesay  dag-nms8c-whalesay-4009067076  4s          
+ └─✔ b        whalesay  dag-nms8c-whalesay-4059399933  3s  
+```
+Explore [[2]] to learn more details about Argo Workflows.
+
 [1]: https://argoproj.github.io/argo-workflows/
 [2]: https://killercoda.com/pipekit/course/argo-workflows/
 
