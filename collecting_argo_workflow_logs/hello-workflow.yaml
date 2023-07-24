@@ -9,4 +9,5 @@ spec:
     container: # this is a container template
       image: docker/whalesay # this image prints "hello world" to the console
       command: ["cowsay"]
+      args: [ "hello {{workflow.name}}" ]
 
