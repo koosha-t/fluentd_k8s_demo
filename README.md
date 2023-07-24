@@ -17,5 +17,6 @@ This repository will be containing several demos of fluentd usages in kubernetes
 
 List of demos:
 * [Sending k8s logs from minikube to fluentd](https://github.com/koosha-t/fluentd_k8s_demo/tree/main/sending_logs_from_minikube_to_fluentd)
+* Collecting Argo Workflow Logs
 * [more demos to be released soon]      
 
