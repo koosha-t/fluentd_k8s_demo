@@ -1,4 +1,4 @@
-# Kubernetes Log Unification, Routing, and Aggrevation Using Fluentd
+# Kubernetes Log Unification, Routing, and Aggregation Using Fluentd
 
 __*Important Note*__: This tutorial is mainly extracted from the following book:
 * [Logging in Action With Fluentd, Kubernetes and more](https://www.manning.com/books/logging-in-action?experiment=B)
